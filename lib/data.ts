@@ -1,4 +1,5 @@
 import type { Offer } from "./types";
+import catalogExtra from "./catalog.extra.json";
 
 /**
  * Cached snapshot of real Leboncoin search results for "RTX 5060".
@@ -404,22 +405,35 @@ const SEEDS: Seed[] = [
   },
 ];
 
-export const CACHE_OFFERS: Offer[] = SEEDS.map((s) => ({
-  ...s,
-  image: IMG + s.img,
-  collectedAt: COLLECTED,
-}));
+// Expanded catalogue: real Leboncoin snapshots across many categories
+// (consoles, tablettes, téléphones, ordinateurs, vélos, scooters, jeux…),
+// parsed from data/raw/*.md into lib/catalog.extra.json. Merges with the
+// RTX 5060 seed set so the search returns results for ANY query.
+type ExtraOffer = Omit<Offer, "collectedAt">;
+const EXTRA_OFFERS: ExtraOffer[] = catalogExtra as ExtraOffer[];
+
+export const CACHE_OFFERS: Offer[] = [
+  ...SEEDS.map((s) => ({
+    ...s,
+    image: IMG + s.img,
+    collectedAt: COLLECTED,
+  })),
+  ...EXTRA_OFFERS.map((o) => ({ ...o, collectedAt: COLLECTED })),
+];
 
 export const CACHE_COLLECTED_AT = COLLECTED;
 
 /** Quick-search presets shown as chips under the search bar. */
 export const PRESETS = [
   "RTX 5060",
-  "RTX 5060 Ti",
   "PS5",
+  "PS4",
+  "Switch",
   "iPhone 15",
   "MacBook Air",
+  "iPad",
   "Vélo électrique",
+  "Scooter électrique",
 ];
 
 /** Build an image URL from a Leboncoin image path. */
