@@ -1,0 +1,225 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --apple-blue: #0071e3;
+  --apple-blue-bright: #0a84ff;
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-bg-strong: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-highlight: rgba(255, 255, 255, 0.9);
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: #f4f8ff;
+  color: #1d1f24;
+  font-feature-settings: "ss01", "ss02";
+}
+
+::selection {
+  background: rgba(10, 132, 255, 0.22);
+}
+
+/* ------------------------------------------------------------------ */
+/* Liquid glass primitives                                            */
+/* ------------------------------------------------------------------ */
+@layer components {
+  /* A frosted translucent surface with an inner top highlight + soft border. */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 8px 32px 0 rgba(31, 69, 132, 0.1),
+      inset 0 1px 0 0 var(--glass-highlight),
+      inset 0 -1px 0 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .glass-strong {
+    background: var(--glass-bg-strong);
+    backdrop-filter: saturate(180%) blur(28px);
+    -webkit-backdrop-filter: saturate(180%) blur(28px);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 12px 40px 0 rgba(31, 69, 132, 0.14),
+      inset 0 1px 0 0 var(--glass-highlight);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.62);
+    backdrop-filter: saturate(170%) blur(18px);
+    -webkit-backdrop-filter: saturate(170%) blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+      0 2px 12px 0 rgba(31, 69, 132, 0.08),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.85);
+    transition:
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.45s ease;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(10, 132, 255, 0.5);
+    box-shadow:
+      0 24px 60px -12px rgba(10, 132, 255, 0.35),
+      0 8px 24px -8px rgba(31, 69, 132, 0.16),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+  }
+
+  /* Subtle moving sheen used on the primary button. */
+  .sheen {
+    background-image: linear-gradient(
+      120deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.45) 45%,
+      rgba(255, 255, 255, 0.45) 55%,
+      transparent 80%
+    );
+    background-size: 220% 100%;
+    background-position: -120% 0;
+  }
+
+  .blue-gradient {
+    background: linear-gradient(135deg, #36abf8 0%, #0a84ff 45%, #0071e3 100%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(120deg, #0a84ff 0%, #0071e3 60%, #005bb5 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Animated background blobs                                          */
+/* ------------------------------------------------------------------ */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 80% -10%, #eaf3ff 0%, transparent 55%),
+    radial-gradient(120% 90% at 0% 0%, #e3f0ff 0%, transparent 50%),
+    linear-gradient(180deg, #f6faff 0%, #eef5ff 40%, #f3f8ff 100%);
+}
+
+.aurora::before,
+.aurora::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.6;
+}
+
+.aurora::before {
+  width: 46vw;
+  height: 46vw;
+  left: -8vw;
+  top: -10vw;
+  background: radial-gradient(circle at 30% 30%, #7cc8fb, #0a84ff);
+  animation: blob 22s ease-in-out infinite;
+}
+
+.aurora::after {
+  width: 40vw;
+  height: 40vw;
+  right: -6vw;
+  top: 8vh;
+  background: radial-gradient(circle at 70% 70%, #bae0fd, #36abf8);
+  animation: blob 28s ease-in-out infinite reverse;
+}
+
+.blob-3 {
+  position: absolute;
+  width: 34vw;
+  height: 34vw;
+  left: 30vw;
+  bottom: -12vw;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.45;
+  background: radial-gradient(circle at 50% 50%, #ffffff, #bae0fd);
+  animation: blob 26s ease-in-out infinite;
+}
+
+@keyframes blob {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(50px, -40px) scale(1.12);
+  }
+  66% {
+    transform: translate(-40px, 30px) scale(0.92);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Shimmer skeleton                                                   */
+/* ------------------------------------------------------------------ */
+.shimmer {
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.5) 30%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0.5) 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Scrollbar                                                          */
+/* ------------------------------------------------------------------ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(10, 132, 255, 0.25);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(10, 132, 255, 0.4);
+  background-clip: padding-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
